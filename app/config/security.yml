@@ -5,7 +5,15 @@ security:
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
         in_memory:
-            memory: ~
+            memory:
+                users:
+                    hristoh:
+                        password: $2y$12$zVG1RUoyavtNga2bp7BzRuxGecJgEqA.glLNc.URh0U4nfFJ4zT8O
+                        roles: 'ROLE_ADMIN'
+    encoders:
+        Symfony\Component\Security\Core\User\User:
+            algorithm: bcrypt
+            cost: 12
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -16,9 +24,22 @@ security:
         main:
             anonymous: ~
             # activate different ways to authenticate
-
             # https://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
             #http_basic: ~
-
             # https://symfony.com/doc/current/security/form_login_setup.html
             #form_login: ~
+            http_basic: ~
+#        secured_area:
+            logout:
+                path:   /admin/logout
+                target: /
+                
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+                
+    access_control:
+#        - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#        - { path: ^/admin/users, roles: ROLE_SUPER_ADMIN }
+        # require ROLE_ADMIN for /admin*
+        - { path: ^/admin, roles: ROLE_ADMIN }

@@ -1,0 +1,16 @@
+-- Adding a bundle without vendor folder
+Add it to composer.json.
+    "autoload": {
+        "psr-4": {
+            "AppBundle\\": "src/AppBundle",
+            "AdminBundle\\": "src/AdminBundle"
+        },
+        "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
+    },
+
+-- git cache clear
+php bin/console cache:clear --no-warmup --env=dev
+php bin/console cache:clear --no-warmup --env=prod
+
+-- git tagging
+git tag -a v0.1 -m "AdminBundle init"
